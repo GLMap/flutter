@@ -1,0 +1,23 @@
+name: glmap_core
+description: Globus glmap_core SDK for Flutter on Android and iOS.
+version: 0.1.0-beta.1
+homepage: https://globus.software
+publish_to: none
+resolution: workspace
+environment:
+  sdk: ^3.13.3
+  flutter: '>=3.47.4'
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: ^1.19.0
+dev_dependencies:
+  pigeon: 29.0.1
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: software.globus.flutter.core
+        pluginClass: GLMapCorePlugin
+      ios:
+        pluginClass: GLMapCorePlugin

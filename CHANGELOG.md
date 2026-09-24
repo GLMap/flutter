@@ -1,7 +1,11 @@
-## 0.1.0-beta.1 (unreleased)
+## 0.1.0-beta.1
 
-- Extract the standalone Flutter plugin and example from the cross-platform laboratory.
-- Migrate Android initialization and hit testing to current GLMap Core/state APIs.
-- Consume exact Maven/SwiftPM versions or an explicit local native SDK override.
-- Build iOS device and simulator applications; remove FFI/JNI benchmark dependencies.
-- Retain typed camera, vectors, map-owned drawable handles and service examples.
+- Provide four Flutter packages: `glmap_core`, `glmap`, `glsearch` and `glroute`.
+- Add SDK initialization, bundled datasets, regional downloads and area downloads.
+- Expose native map views, typed camera snapshots, gestures, vector layers and
+  map-owned drawable handles.
+- Support online/offline search, POI queries, road routing, custom routes and
+  route tracking. Search and Route can be used without the map renderer.
+- Include a 20-screen demo catalog and Android/iOS integration coverage for API
+  behavior, cancellation, ownership and lifecycle handling.
+- Target Android API 24+ and iOS 16.4+ with native SDK 2.2.0.

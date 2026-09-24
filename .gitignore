@@ -18,3 +18,10 @@ local.properties
 xcuserdata/
 __pycache__/
 *.pyc
+
+# Old single-plugin root build outputs; sources now live under packages/.
+/android/
+/ios/
+
+# Generated local verification projects
+/tests/headless-ios/*.xcodeproj/

@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
+import 'package:glsearch/glsearch.dart';
+import 'package:glroute/glroute.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:glmap_lab_example/demo/common.dart';
@@ -18,13 +20,13 @@ void main() {
     await GLMapSDK.initialize(
       apiKey: const String.fromEnvironment('GLMAP_API_KEY'),
     );
-    final found = await GLMapSDK.search(
+    final found = await GLSearch.search(
       'Podgorica',
       center: podgorica,
       offline: true,
     ).result.timeout(const Duration(seconds: 30));
     expect(found, isNotEmpty);
-    final request = GLMapSDK.route(
+    final request = GLRouteSDK.route(
       start: sampleLine.first,
       end: sampleLine.last,
       offline: true,

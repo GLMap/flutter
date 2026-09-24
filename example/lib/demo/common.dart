@@ -5,7 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
 import 'package:geolocator/geolocator.dart';
 
 const podgorica = GLMapGeoPoint(latitude: 42.4341, longitude: 19.26);

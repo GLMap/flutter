@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
+import 'package:glsearch/glsearch.dart';
 
 import 'common.dart';
 
@@ -32,7 +33,7 @@ class _SearchDemoState extends State<SearchDemo> {
     await request?.cancel();
     if (!mounted || token != generation) return;
     setState(() => loading = true);
-    final pending = GLMapSDK.search(
+    final pending = GLSearch.search(
       query.text,
       center: podgorica,
       offline: offline,
@@ -226,10 +227,7 @@ class _POITapDemoState extends MapDemoState<POITapDemo> {
       message('No visible POI here');
       return;
     }
-    await (balloon ??= map!.createBalloon()).set(
-      object.point,
-      object.name,
-    );
+    await (balloon ??= map!.createBalloon()).set(object.point, object.name);
     message('${object.name}\n${object.detail}');
   }
 

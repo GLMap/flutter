@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

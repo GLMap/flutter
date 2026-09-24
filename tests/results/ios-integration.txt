@@ -1,7 +1,17 @@
+Waiting for another flutter command to release the startup lock...
+Resolving dependencies in `/Users/evgen/git/glmap_flutter`...
+Downloading packages...
+  dbus 0.7.15 (0.8.0 available)
+  gsettings 0.2.8 (0.2.9 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  pigeon 29.0.1 (29.0.2 available)
+  test_api 0.7.12 (0.7.14 available)
+Got dependencies in `/Users/evgen/git/glmap_flutter`!
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
 00:00 +0: loading /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart
-Adding Swift Package Manager integration...                          4ms
 Running Xcode build...
-Xcode build done.                                           30.1s
+Xcode build done.                                           34.4s
 00:00 +0: /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart: bundled data, offline search, route builder and tracker
 DEMO_SERVICES_PASS places=30, distance=2511.6698904591485, progress=0.000054608254777311454/2.000034398469861/4.0
 00:00 +1: /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart: native vector hit testing and removed-layer error
@@ -27,21 +37,19 @@ DEMO_SCREEN_PASS Route Building
 DEMO_SCREEN_PASS Turn-by-Turn Navigation
 DEMO_SCREEN_PASS Download Maps
 DEMO_SCREEN_PASS Download BBox
-01:22 +4: /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart: (tearDownAll)
+01:21 +4: /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart: (tearDownAll)
 01:22 +4: loading /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart
-Adding Swift Package Manager integration...                          5ms
 Running Xcode build...
-Xcode build done.                                           14.7s
-01:44 +4: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: typed state, camera fields, input validation and retained snapshot
-01:45 +5: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: two maps, concurrent captures and disposal isolation
-01:45 +6: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: (tearDownAll)
-01:46 +6: loading /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart
-Adding Swift Package Manager integration...                          3ms
+Xcode build done.                                           13.8s
+01:42 +4: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: typed state, camera fields, input validation and retained snapshot
+01:43 +5: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: two maps, concurrent captures and disposal isolation
+01:43 +6: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: (tearDownAll)
+01:44 +6: loading /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart
 Running Xcode build...
-Xcode build done.                                           12.8s
-02:05 +6: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: vector geometry, retained input, restyle, rejection, clear and remove
-02:06 +7: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: ordered overlapping vector updates and removal on two maps
+Xcode build done.                                           13.8s
+02:03 +6: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: vector geometry, retained input, restyle, rejection, clear and remove
+02:04 +7: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: ordered overlapping vector updates and removal on two maps
 Vector burst: ready=1, superseded=59
 Vector removal: cancelled=1
-02:07 +8: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: (tearDownAll)
-02:07 +8: All tests passed!
+02:05 +8: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: (tearDownAll)
+02:05 +8: All tests passed!

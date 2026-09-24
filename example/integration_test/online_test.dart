@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glsearch/glsearch.dart';
+import 'package:glroute/glroute.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:glmap_lab_example/demo/common.dart';
@@ -21,7 +22,7 @@ void main() {
   });
 
   testWidgets('authenticated online search and road routes', (tester) async {
-    final request = GLMapSDK.search(
+    final request = GLSearch.search(
       'Podgorica',
       center: podgorica,
       offline: false,
@@ -37,7 +38,7 @@ void main() {
       await request.cancel();
     }
     for (final mode in GLMapRouteMode.values) {
-      final request = GLMapSDK.route(
+      final request = GLRouteSDK.route(
         start: sampleLine.first,
         end: sampleLine.last,
         mode: mode,
@@ -148,12 +149,12 @@ void main() {
     // A second call must reuse all three completed files without EEXIST.
     await GLMapSDK.downloadArea(townBounds).result
         .timeout(const Duration(seconds: 10));
-    final found = await GLMapSDK.search(
+    final found = await GLSearch.search(
       'Podgorica',
       center: podgorica,
     ).result.timeout(const Duration(seconds: 30));
     expect(found, isNotEmpty);
-    final pending = GLMapSDK.route(
+    final pending = GLRouteSDK.route(
       start: sampleLine.first,
       end: sampleLine.last,
       offline: true,

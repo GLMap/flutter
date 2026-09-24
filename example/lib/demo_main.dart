@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
+import 'package:glsearch/glsearch.dart';
+import 'package:glroute/glroute.dart';
 
 import 'demo/map_examples.dart';
 import 'demo/draw_examples.dart';

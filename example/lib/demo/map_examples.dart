@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
 
 import 'common.dart';
 

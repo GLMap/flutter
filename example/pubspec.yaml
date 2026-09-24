@@ -1,6 +1,7 @@
 name: glmap_lab_example
 description: GLMap cross-platform lab — Flutter stage A.
 publish_to: none
+resolution: workspace
 version: 0.0.1+1
 environment:
   sdk: ^3.13.3
@@ -8,8 +9,10 @@ dependencies:
   flutter:
     sdk: flutter
   geolocator: ^14.0.3
-  glmap_flutter:
-    path: ../
+  glmap_core: 0.1.0-beta.1
+  glmap: 0.1.0-beta.1
+  glsearch: 0.1.0-beta.1
+  glroute: 0.1.0-beta.1
 dev_dependencies:
   integration_test:
     sdk: flutter

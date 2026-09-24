@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
+import 'package:glroute/glroute.dart';
 
 import 'common.dart';
 
@@ -52,7 +53,7 @@ class _RouteBuildingDemoState extends MapDemoState<RouteBuildingDemo> {
   Future<void> calculate() async {
     final token = ++generation;
     await request?.cancel();
-    final pending = GLMapSDK.route(
+    final pending = GLRouteSDK.route(
       start: start,
       end: end,
       mode: mode,
@@ -170,7 +171,7 @@ class _TurnByTurnDemoState extends MapDemoState<TurnByTurnDemo> {
     generation++;
     await request?.cancel();
     // A custom route makes the tracker reproducible without a network request.
-    final next = await GLMapSDK.buildRoute([
+    final next = await GLRouteSDK.buildRoute([
       GLMapRouteStep(
         points: sampleLine.sublist(0, 3),
         instruction: 'Continue to the crossing',
@@ -191,7 +192,7 @@ class _TurnByTurnDemoState extends MapDemoState<TurnByTurnDemo> {
   Future<void> tapped(GLMapTap tap) async {
     final token = ++generation;
     await request?.cancel();
-    request = GLMapSDK.route(start: current, end: tap.point);
+    request = GLRouteSDK.route(start: current, end: tap.point);
     final next = await request!.result;
     if (!mounted || token != generation) {
       await next.close();

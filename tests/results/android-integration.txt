@@ -1,13 +1,22 @@
-Waiting for another flutter command to release the startup lock...
+Resolving dependencies in `/Users/evgen/git/glmap_flutter`...
+Downloading packages...
+  dbus 0.7.15 (0.8.0 available)
+  gsettings 0.2.8 (0.2.9 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  pigeon 29.0.1 (29.0.2 available)
+  test_api 0.7.12 (0.7.14 available)
+Got dependencies in `/Users/evgen/git/glmap_flutter`!
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
 00:00 +0: loading /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart
 Running Gradle task 'assembleDebug'...
 warning: [options] source value 8 is obsolete and will be removed in a future release
 warning: [options] target value 8 is obsolete and will be removed in a future release
 warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
 3 warnings
-Running Gradle task 'assembleDebug'...                             33.7s
+Running Gradle task 'assembleDebug'...                             33.0s
 ✓ Built build/app/outputs/flutter-apk/app-debug.apk
-Installing build/app/outputs/flutter-apk/app-debug.apk...          474ms
+Installing build/app/outputs/flutter-apk/app-debug.apk...          521ms
 00:00 +0: /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart: bundled data, offline search, route builder and tracker
 DEMO_SERVICES_PASS places=30, distance=2511.6698904589794, progress=0.000054608254777311454/2.000034398469861/4.0
 00:00 +1: /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart: native vector hit testing and removed-layer error
@@ -33,21 +42,21 @@ DEMO_SCREEN_PASS Route Building
 DEMO_SCREEN_PASS Turn-by-Turn Navigation
 DEMO_SCREEN_PASS Download Maps
 DEMO_SCREEN_PASS Download BBox
-01:08 +4: /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart: (tearDownAll)
-01:08 +4: loading /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart
-Running Gradle task 'assembleDebug'...                             10.4s
+01:10 +4: /Users/evgen/git/glmap_flutter/example/integration_test/demo_test.dart: (tearDownAll)
+01:10 +4: loading /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart
+Running Gradle task 'assembleDebug'...                             10.3s
 ✓ Built build/app/outputs/flutter-apk/app-debug.apk
-Installing build/app/outputs/flutter-apk/app-debug.apk...          485ms
-01:24 +4: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: typed state, camera fields, input validation and retained snapshot
-01:24 +5: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: two maps, concurrent captures and disposal isolation
-01:25 +6: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: (tearDownAll)
-01:25 +6: loading /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart
-Running Gradle task 'assembleDebug'...                             14.6s
+Installing build/app/outputs/flutter-apk/app-debug.apk...          406ms
+01:23 +4: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: typed state, camera fields, input validation and retained snapshot
+01:23 +5: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: two maps, concurrent captures and disposal isolation
+01:24 +6: /Users/evgen/git/glmap_flutter/example/integration_test/api_test.dart: (tearDownAll)
+01:24 +6: loading /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart
+Running Gradle task 'assembleDebug'...                              9.4s
 ✓ Built build/app/outputs/flutter-apk/app-debug.apk
-Installing build/app/outputs/flutter-apk/app-debug.apk...          465ms
-01:43 +6: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: vector geometry, retained input, restyle, rejection, clear and remove
-01:45 +7: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: ordered overlapping vector updates and removal on two maps
+Installing build/app/outputs/flutter-apk/app-debug.apk...          424ms
+01:36 +6: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: vector geometry, retained input, restyle, rejection, clear and remove
+01:37 +7: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: ordered overlapping vector updates and removal on two maps
 Vector burst: ready=1, superseded=59
 Vector removal: cancelled=1
-01:46 +8: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: (tearDownAll)
-01:46 +8: All tests passed!
+01:38 +8: /Users/evgen/git/glmap_flutter/example/integration_test/vector_test.dart: (tearDownAll)
+01:38 +8: All tests passed!

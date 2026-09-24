@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
+import 'package:glsearch/glsearch.dart';
+import 'package:glroute/glroute.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:glmap_lab_example/demo_main.dart' as demo;
@@ -29,7 +31,7 @@ void main() {
       apiKey: const String.fromEnvironment('GLMAP_API_KEY'),
     );
     await GLMapSDK.addAssetDataSet('assets/Montenegro.vm', GLMapDataSet.map);
-    final found = await GLMapSDK.search(
+    final found = await GLSearch.search(
       'Podgorica',
       center: podgorica,
     ).result.timeout(const Duration(seconds: 20));
@@ -39,7 +41,7 @@ void main() {
       isTrue,
     );
     // Cancellation may race successful completion, but must always settle.
-    final obsolete = GLMapSDK.search(
+    final obsolete = GLSearch.search(
       'restaurant',
       center: podgorica,
       autocomplete: true,
@@ -53,7 +55,7 @@ void main() {
       await outcome.timeout(const Duration(seconds: 10)),
       anyOf(isA<List<GLMapPlace>>(), isA<PlatformException>()),
     );
-    final failedRoute = GLMapSDK.route(
+    final failedRoute = GLRouteSDK.route(
       start: sampleLine.first,
       end: sampleLine.last,
       offline: true,
@@ -67,7 +69,7 @@ void main() {
     final cancelled = await routeOutcome.timeout(const Duration(seconds: 10));
     if (cancelled is GLMapRoute) await cancelled.close();
     expect(cancelled, anyOf(isA<GLMapRoute>(), isA<PlatformException>()));
-    final route = await GLMapSDK.buildRoute([
+    final route = await GLRouteSDK.buildRoute([
       GLMapRouteStep(
         points: sampleLine.sublist(0, 3),
         instruction: 'Continue to the crossing',

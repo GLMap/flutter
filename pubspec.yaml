@@ -1,26 +1,15 @@
-name: glmap_flutter
-description: Native GLMap maps, offline data, search and routing for Flutter on iOS and Android.
-version: 0.1.0-beta.1
-homepage: https://globus.software
-# Deliberately unpublished until native 2.2.0 and the release gates are complete.
+name: globus_flutter_workspace
 publish_to: none
 environment:
   sdk: ^3.13.3
-  flutter: '>=3.47.4'
-dependencies:
-  meta: ^1.19.0
-  flutter:
-    sdk: flutter
+workspace:
+  - packages/glmap_core
+  - packages/glmap
+  - packages/glsearch
+  - packages/glroute
+  - example
 dev_dependencies:
+  pigeon: 29.0.1
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
-  pigeon: 29.0.1
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: software.globus.lab.glmap_lab
-        pluginClass: GlmapLabPlugin
-      ios:
-        pluginClass: GlmapLabPlugin

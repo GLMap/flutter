@@ -1,86 +1,137 @@
-# Flutter API demo
+# GLMap demo code guide
 
-`lib/demo_main.dart` opens the catalog of **20 small API examples**, following the existing Swift and Kotlin demos. Each screen contains its own SDK calls in `lib/demo/`. Montenegro is bundled for offline map display and search.
+The demo is a catalog of **20 Flutter API examples** for Android and iOS. Each
+screen keeps its SDK calls close to its UI so you can find a feature, read the
+implementation and adapt it to your app.
 
-## Run
+For requirements, launch commands and API-key setup, see
+[Run the demo](../README.md#run-the-demo). The catalog entry point is
+**`lib/demo_main.dart`**, not `lib/main.dart`.
 
-Prepare the local SDK with GLMap, GLMapCore, GLSearch and GLRoute; see [setup and verification](../README.md). Then:
+## Directory structure
 
-```sh
-flutter pub get
-flutter run -t lib/demo_main.dart -d <simulator-or-emulator-id>
+```text
+example/
+├── lib/
+│   ├── demo_main.dart            # SDK startup, app theme and screen catalog
+│   ├── demo/
+│   │   ├── common.dart           # Shared map-screen layout and small helpers
+│   │   ├── map_examples.dart     # Map display, themes, terrain and camera
+│   │   ├── draw_examples.dart    # Images, markers, vectors, tracks and location
+│   │   ├── search_examples.dart  # Search UI and map-object picking
+│   │   ├── routing_examples.dart # Route building and navigation tracking
+│   │   └── download_examples.dart# Regional and bounding-box downloads
+│   ├── main.dart                 # Focused embedding and lifecycle sample
+│   └── vector_main.dart          # Focused vector-layer sample
+├── assets/                       # Bundled datasets and sample geometry/config
+├── integration_test/             # Flutter tests using the native plugins
+├── test_driver/                  # Integration driver and screenshot output
+├── android/                      # Android host, permissions and input tests
+├── ios/                          # iOS host, permissions and input tests
+└── pubspec.yaml                  # Flutter dependencies and asset declarations
 ```
 
-Online SDK services need a suitable API key. Use the key button in the catalog for the current session, or an ignored `config/local.json` containing `{"GLMAP_API_KEY":"your-demo-key"}`:
+The repository's Dart workspace resolves the four SDK packages from `../packages/`.
+The demo calls their public Dart APIs; native bridge implementations belong to
+those packages, not to the demo's platform host directories.
 
-```sh
-flutter run -t lib/demo_main.dart -d <device-id> --dart-define-from-file=config/local.json
-```
+## Startup and screen lifecycle
 
-The app does not persist a key entered in the dialog. A build-time key is embedded in that build; use a demo key.
+1. [`demo_main.dart`](lib/demo_main.dart) initializes Flutter, then calls
+   `GLMapSDK.initialize` with `GLMAP_API_KEY` from the build environment.
+2. It registers `assets/Montenegro.vm` with `GLMapSDK.addAssetDataSet` for offline
+   map display and search. An initialization failure is shown in the catalog.
+3. `DemoApp` builds the Material theme. `DemoCatalog` filters the `demos` list of
+   `DemoEntry` objects and opens the selected screen with Flutter navigation.
+   The key button reapplies SDK initialization with a session-only API key.
+4. Most map screens extend `MapDemoState` in [`common.dart`](lib/demo/common.dart).
+   It creates the `GLMap` widget, stores the controller, subscribes to taps and
+   invokes `ready(controller)`. A screen supplies `title`, `api`, `controls()`
+   and, when needed, `tapped()`.
+5. `MapDemoState.run()` shows busy/error state around asynchronous operations.
+   The base class cancels its tap subscription on disposal. Individual screens
+   cancel their own requests, timers and GPS/download subscriptions; route
+   screens also close retained routes. The map widget owns its controller and
+   drawable handles, which become invalid when it is removed.
 
-## Examples
+`common.dart` also holds sample coordinates around Podgorica, pin-image and
+GeoJSON helpers, and `foregroundPositions()` for permission-checked location
+updates. Feature-specific SDK operations stay in each screen implementation.
 
-| Source | Screens |
+## Where to find each feature
+
+Paths below are relative to `lib/demo/`.
+
+| Source | Catalog screens |
 | --- | --- |
-| `demo/map_examples.dart` | Online Map (vector/raster), Dark Theme, 3D Terrain, Fly To, Zoom to BBox |
-| `demo/draw_examples.dart` | Image, Image Group, Markers & Clustering, Balloon, Track Arrows, User Location, Lines & Polygons, GeoJSON, GPS Track |
-| `demo/search_examples.dart` | Search, POI Tap |
-| `demo/routing_examples.dart` | Route Building, Turn-by-Turn Navigation |
-| `demo/download_examples.dart` | Download Maps, Download BBox |
+| [map_examples.dart](lib/demo/map_examples.dart) | Online Map, Dark Theme, 3D Terrain, Fly To, Zoom to BBox |
+| [draw_examples.dart](lib/demo/draw_examples.dart) | Image, Image Group, Markers & Clustering, Balloon, Track Arrows, User Location, Lines & Polygons, GeoJSON, GPS Track |
+| [search_examples.dart](lib/demo/search_examples.dart) | Search, POI Tap |
+| [routing_examples.dart](lib/demo/routing_examples.dart) | Route Building, Turn-by-Turn Navigation |
+| [download_examples.dart](lib/demo/download_examples.dart) | Download Maps, Download BBox |
 
-- **Search:** bundled Montenegro supports offline text/category search, autocomplete, markers and list selection. Switch to online to call the online SDK service.
-- **Route Building:** tap a destination, long press a start point, choose car/bicycle/pedestrian, then build. Offline road routing requires downloaded navigation data. The sample passes `assets/valhalla.json` explicitly to the wrapper.
-- **Turn-by-Turn:** starts with a clearly labeled custom route built by `GLRouteBuilder`, allowing reproducible tracker replay without network/data downloads. `Next position` feeds its coordinates to the native tracker. `Use GPS` starts foreground location updates; tapping the map requests a real online road route to that destination. This sample has no voice guidance, background service or automatic rerouting.
-- **Downloads:** regional catalog/download/cancel/delete and fixed-area map/navigation/elevation downloads call GLMapManager. A valid key/network is needed. Completed BBox files are retained in the wrapper’s `glmap-areas` directory and re-registered during SDK initialization. Repeating the same bounds reuses the completed files; partial downloads are not installed. GPS permission is requested only after pressing `Use GPS`.
-- **GeoJSON:** loads the native examples' UK postcode asset and uses native vector hit testing when tapped.
+Notable implementation details:
+
+- **Search** combines offline/online queries, debounced autocomplete, cancellation,
+  markers and list selection. The bundled data covers Montenegro.
+- **POI Tap** uses Search's map-object picking API on the map controller.
+- **Route Building** accepts a tap for the destination and a long press for the
+  start, then requests a car/bicycle/pedestrian route. Offline road routing needs
+  downloaded navigation data and the configuration in `assets/valhalla.json`.
+- **Turn-by-Turn Navigation** starts with a custom route from
+  `GLRouteSDK.buildRoute`. `Next position` replays coordinates into the native
+  tracker without downloads; `Use GPS` enables foreground updates. A map tap
+  requests an online road route. This is a tracking example, not a complete
+  navigation app: it has no voice guidance, background service or automatic
+  rerouting.
+- **Downloads** show Core's regional catalog, progress events, cancellation,
+  deletion and area downloads. The SDK retains completed area files in the app's
+  `glmap-areas` directory and re-registers them during initialization. Repeating
+  the same bounds reuses completed files; partial downloads are not installed.
+- **User Location / GPS Track** share `LocationDemo`; the catalog uses
+  `LocationDemo(record: true)` for track recording. GPS permission is requested
+  only after the user presses `Use GPS`.
+- **GeoJSON** loads the UK postcode asset and uses native vector hit testing.
+
+## Assets and focused samples
+
+Assets are declared in [`pubspec.yaml`](pubspec.yaml):
+
+| Asset | Use |
+| --- | --- |
+| `Montenegro.vm` | Offline map display and search in the catalog; not navigation or elevation data |
+| `valhalla.json` | Configuration for offline road-routing requests |
+| `uk_postcodes.geojson` | Geometry for the GeoJSON screen |
+| `track-arrow.svg` | Arrow image for the Track Arrows screen |
+| `stage-a.json` | Shared fixture for the focused map and vector samples |
+
+Keep routing configuration compatible with the native SDK. Map data is
+© OpenStreetMap contributors; native SDK and data terms also apply.
+
+[`lib/main.dart`](lib/main.dart) demonstrates embedding, Flutter overlays,
+navigation and repeated map removal. [`lib/vector_main.dart`](lib/vector_main.dart)
+demonstrates vector geometry/style updates. Run either with its own `-t` entry
+point; neither opens the catalog.
+
+## Add or change an example
+
+1. Put the screen in the matching `lib/demo/*_examples.dart` file. For a standard
+   map screen, extend `MapDemoState` and keep the SDK calls in the screen itself.
+2. Add a `DemoEntry` to `demos` in `demo_main.dart` so the catalog can display it.
+3. Register any new bundled assets in `pubspec.yaml`.
+4. Cancel screen-owned work on disposal and close any retained routes. Handle
+   asynchronous results arriving after the screen has been removed.
+5. Update this guide and the matching integration tests. If adding a screen,
+   update the catalog's displayed example count too.
 
 ## Tests
 
-```sh
-flutter analyze
-flutter test integration_test/demo_test.dart -d <device-id>
-flutter drive -d <device-id> --driver test_driver/demo_driver.dart \
-  --target integration_test/demo_test.dart --dart-define=DEMO_SCREENSHOTS=true
-```
+`integration_test/demo_test.dart` covers the catalog. `api_test.dart` and
+`vector_test.dart` exercise native API and lifecycle behavior. The focused entry
+points have `stage_a_test.dart` and `vector_demo_test.dart`; authenticated services
+and retained downloads have `online_test.dart` and `offline_restore_test.dart`.
 
-The driver saves screenshots under the example's `build/demo-screenshots` (override with `DEMO_SCREENSHOT_DIR`). The integration suite checks real native offline search/cancellation, route replay/cancellation, vector hit testing, and the 20-screen catalog. Authenticated services and fresh-process restoration have separate tests:
-
-```sh
-# Keep downloaded data for the following fresh-process test.
-flutter test integration_test/online_test.dart -d <device-id> --no-uninstall \
-  --dart-define-from-file=config/local.json
-flutter drive -d <device-id> --driver test_driver/demo_driver.dart \
-  --target integration_test/offline_restore_test.dart --keep-app-running \
-  --dart-define-from-file=config/local.json --dart-define=DEMO_SCREENSHOTS=true
-```
-
-The online suite checks search, three route modes, BBox cancellation/download/cache reuse, region catalog/download/delete and transfer events. The restore test adds no bundled datasets and starts no downloads: it uses offline search/road routing, exercises the Route Building screen, and captures terrain from the retained files. These tests use explicit offline APIs; they do not put the device in airplane mode. Keep verbose authenticated logs in ignored `.artifacts/`, because native network messages can contain the API key.
-
-Native input tests use the **normal demo entry point**:
-
-```sh
-# iOS: configure the entry point before Xcode builds it.
-flutter build ios --simulator --debug --config-only -t lib/demo_main.dart
-xcrun simctl location <simulator-id> set 42.4341,19.2600
-xcrun simctl privacy <simulator-id> reset location software.globus.lab.glmapLabExample
-xcodebuild -project ios/Runner.xcodeproj -scheme StageA \
-  -destination 'platform=iOS Simulator,id=<simulator-id>' \
-  -parallel-testing-enabled NO -only-testing:RunnerUITests/DemoCatalogTests \
-  CODE_SIGNING_ALLOWED=NO test
-
-# Android: use one emulator; feed location while the test runs.
-adb -s emulator-5554 emu geo fix 19.2600 42.4341
-cd android
-ANDROID_SERIAL=emulator-5554 ./gradlew :app:connectedDebugAndroidTest \
-  -Ptarget=lib/demo_main.dart \
-  -Pandroid.testInstrumentationRunnerArguments.class=software.globus.lab.glmap_lab_example.DemoCatalogTest
-```
-
-Read `../VERIFICATION.md` for current outcomes and pending checks.
-
-## Earlier lab entry points
-
-`lib/main.dart` remains the Stage A embedding/gesture experiment; `lib/vector_main.dart` is the vector experiment. Their tests require those entry points. Run only the matching XCTest/UIAutomator class. See the [package README](../README.md) for prior reports.
-
-Fixtures copied from the existing native examples: `Montenegro.vm`, `uk_postcodes.geojson`, `track-arrow.svg`. `valhalla.json` comes from the matching SDK’s `Resources/framework/valhalla.json`; the older reference-app config lacks fields required by the current routing engine. Map data is © OpenStreetMap contributors; existing SDK/data terms continue to apply.
+See [VERIFICATION.md](../VERIFICATION.md) for test commands, screenshot capture,
+platform input tests and the required ordering of online/restoration suites.
+These tests require an Android or iOS target. Never share API keys or unreviewed
+authenticated logs.

@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:glmap_flutter/glmap_flutter.dart';
+import 'package:glmap/glmap.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'common.dart';
@@ -178,10 +178,8 @@ class _BalloonDemoState extends MapDemoState<BalloonDemo> {
   @override
   Widget controls() => button(
     'Show first landmark',
-    () => (balloon ??= map!.createBalloon()).set(
-      sampleLine.first,
-      'Landmark 1',
-    ),
+    () =>
+        (balloon ??= map!.createBalloon()).set(sampleLine.first, 'Landmark 1'),
   );
 }
 
