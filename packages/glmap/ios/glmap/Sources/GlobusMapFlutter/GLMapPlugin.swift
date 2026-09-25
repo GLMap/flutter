@@ -8,7 +8,7 @@ import glmap_core
 public class GLMapPluginImplementation: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let sdk = MapAssets(registrar: registrar)
-        registrar.register(MapFactory(messenger: registrar.messenger(), sdk: sdk), withId: "glmap_lab")
+        registrar.register(MapFactory(messenger: registrar.messenger(), sdk: sdk), withId: "software.globus.glmap/view")
     }
 }
 
@@ -28,11 +28,8 @@ private final class MapPlatformView: NSObject, FlutterPlatformView {
     private var api: MapApiBridge!
     private var features: MapFeaturesBridge!
     private let map: GLMapView
-    private let channel: FlutterMethodChannel
     private let track: GLMapVectorLayer
     private let marker: GLMapImage
-    private var taps = 0
-    private var moves = 0
     private var failure: String?
 
     init(frame: CGRect, id: Int64, messenger: FlutterBinaryMessenger, fixture: [String: Any], sdk: MapAssets) {
@@ -42,14 +39,13 @@ private final class MapPlatformView: NSObject, FlutterPlatformView {
         map = GLMapView(frame: frame)
         track = GLMapVectorLayer(drawOrder: 1)
         marker = GLMapImage(drawOrder: 2)
-        channel = FlutterMethodChannel(name: "glmap_lab/\(id)", binaryMessenger: messenger)
         super.init()
         map.isAccessibilityElement = true
         map.accessibilityIdentifier = "GLMap canvas"
         map.accessibilityLabel = "GLMap canvas"
         do {
             guard let path = GLMapManager.shared.resourcesBundle.path(forResource: "DefaultStyle", ofType: "bundle") else {
-                throw NSError(domain: "GLMapLab", code: 1, userInfo: [NSLocalizedDescriptionKey: "GLMap style resource unavailable"])
+                throw NSError(domain: "GLMapFlutter", code: 1, userInfo: [NSLocalizedDescriptionKey: "GLMap style resource unavailable"])
             }
             let parser = GLMapStyleParser(paths: [path])
             map.setStyle(try parser.parseFromResources())
@@ -74,26 +70,19 @@ private final class MapPlatformView: NSObject, FlutterPlatformView {
         api = MapApiBridge(map: map, messenger: messenger, id: id, failure: failure)
         features = MapFeaturesBridge(map: map, sdk: sdk, resources: resources, messenger: messenger, id: id)
         resources.registerMap(id) { [weak map] reply in
-            guard let map, map.window != nil else { reply(.failure(NSError(domain:"map_unavailable",code:1))); return }
+            guard let map, map.window != nil else { reply(.failure(NSError(domain: "map_unavailable", code: 1))); return }
             map.captureState { reply(.success($0)) }
         }
-        map.tapGestureBlock = { [weak self] gesture in guard let self else { return }; taps += 1; features.tap(gesture.location(in: map), longPress: false) }
-        map.longPressGestureBlock = { [weak self] gesture in guard let self, gesture.state == .began else { return }; features.tap(gesture.location(in: map), longPress: true) }
-        map.mapDidMoveBlock = { [weak self] _ in self?.moves += 1 }
-        channel.setMethodCallHandler { [weak self] call, result in
-            guard let self else { result(FlutterError(code: "disposed", message: "Map has been disposed", details: nil)); return }
-            if let failure = self.failure { result(FlutterError(code: "initialization", message: failure, details: nil)); return }
-            switch call.method {
-            case "diagnostics":
-                result(["latitude": self.map.mapGeoCenter.lat, "longitude": self.map.mapGeoCenter.lon,
-                        "zoom": self.map.mapZoomLevel, "angle": self.map.mapAngle,
-                        "taps": self.taps, "moves": self.moves,
-                        "width": self.map.bounds.width, "height": self.map.bounds.height,
-                        "surfaceAvailable": self.map.window != nil, "sdk": "local SDK draft",
-                        "vectorLayers": self.api.vectorDiagnostics()])
-            default: result(FlutterMethodNotImplemented)
-            }
+        map.tapGestureBlock = { [weak self] gesture in
+            guard let self else { return }
+            api.recordTap()
+            features.tap(gesture.location(in: map), longPress: false)
         }
+        map.longPressGestureBlock = { [weak self] gesture in
+            guard let self, gesture.state == .began else { return }
+            features.tap(gesture.location(in: map), longPress: true)
+        }
+        map.mapDidMoveBlock = { [weak self] _ in self?.api.recordMove() }
     }
 
     private func setCamera(_ camera: [String: Any]) {
@@ -106,8 +95,8 @@ private final class MapPlatformView: NSObject, FlutterPlatformView {
         resources.unregisterMap(id)
         features.dispose()
         api.dispose()
-        channel.setMethodCallHandler(nil)
         map.tapGestureBlock = nil
+        map.longPressGestureBlock = nil
         map.mapDidMoveBlock = nil
     }
 }
@@ -118,6 +107,6 @@ private extension Dictionary where Key == String, Value == Any {
 
 @_cdecl("GlobusFlutterMapRegister")
 public func registerMapPlugin(_ pointer: UnsafeMutableRawPointer) {
-    let registrar=Unmanaged<AnyObject>.fromOpaque(pointer).takeUnretainedValue() as! FlutterPluginRegistrar
-    GLMapPluginImplementation.register(with:registrar)
+    let registrar = Unmanaged<AnyObject>.fromOpaque(pointer).takeUnretainedValue() as! FlutterPluginRegistrar
+    GLMapPluginImplementation.register(with: registrar)
 }

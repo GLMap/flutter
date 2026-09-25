@@ -123,7 +123,7 @@ final class MapFeaturesBridge: MapFeaturesHostApi {
         track.progressColor = GLMapColor(red: 128, green: 128, blue: 128, alpha: 255); track.progressIndex = progress
         var draw: [GLMapDrawObject] = [track]; var keep: [AnyObject] = [data, style]
         if arrows {
-            let source = values.withUnsafeBufferPointer { GLMapLabBuildPacked($0.baseAddress!, $0.count) }
+            let source = values.withUnsafeBufferPointer { GLMapFlutterBuildPacked($0.baseAddress!, $0.count) }
             if let source, let line = source[0] as? GLMapVectorLine {
                 let head = UIGraphicsImageRenderer(size: CGSize(width: 40, height: 40)).image { _ in
                     UIColor.systemGreen.setFill(); let path = UIBezierPath(); path.move(to: CGPoint(x: 20,y: 0)); path.addLine(to: CGPoint(x: 40,y: 40)); path.addLine(to: CGPoint(x: 20,y: 30)); path.addLine(to: CGPoint(x: 0,y: 40)); path.close(); path.fill()

@@ -41,7 +41,6 @@ class GLMapViewState {
 class GLMapController implements GLMapQueryTarget {
   GLMapController._(this.viewId)
     : _api = MapHostApi(messageChannelSuffix: '$viewId'),
-      _diagnostics = MethodChannel('glmap_lab/$viewId'),
       _features = MapFeaturesHostApi(messageChannelSuffix: '$viewId') {
     MapEventsApi.setUp(_MapEvents(_taps), messageChannelSuffix: '$viewId');
   }
@@ -49,7 +48,6 @@ class GLMapController implements GLMapQueryTarget {
   @override
   final int viewId;
   final MapHostApi _api;
-  final MethodChannel _diagnostics;
   final MapFeaturesHostApi _features;
   final _taps = StreamController<GLMapTap>.broadcast();
   Stream<GLMapTap> get taps => _taps.stream;
@@ -146,12 +144,10 @@ class GLMapController implements GLMapQueryTarget {
     );
   }
 
-  /// Lab diagnostics and benchmark counters; camera entries are configured targets.
-  Future<Map<String, dynamic>> diagnostics() => _invoke(
-    () async => Map<String, dynamic>.from(
-      await _diagnostics.invokeMapMethod('diagnostics') ?? {},
-    ),
-  );
+  /// Native view diagnostics and counters. Camera entries are configured targets;
+  /// use [captureState] for a render-aligned snapshot.
+  Future<Map<String, dynamic>> diagnostics() =>
+      _invoke(() async => Map<String, dynamic>.from(await _api.diagnostics()));
 
   void _dispose() {
     if (_disposed) return;
@@ -179,7 +175,8 @@ class GLMap extends StatefulWidget {
     required this.onCreated,
   });
 
-  /// Only used by the historical lab tests. Ordinary examples use initialCenter.
+  /// Optional native fixture for controlled integration tests. Applications should
+  /// use [initialCenter] and the controller's drawing APIs.
   final Map<String, dynamic>? fixture;
   final GLMapGeoPoint initialCenter;
   final double initialZoom;
@@ -225,20 +222,20 @@ class _GLMapState extends State<GLMap> {
     };
     return switch (defaultTargetPlatform) {
       TargetPlatform.android => AndroidView(
-        viewType: 'glmap_lab',
+        viewType: 'software.globus.glmap/view',
         creationParams: params,
         creationParamsCodec: const StandardMessageCodec(),
         onPlatformViewCreated: _created,
         gestureRecognizers: gestures,
       ),
       TargetPlatform.iOS => UiKitView(
-        viewType: 'glmap_lab',
+        viewType: 'software.globus.glmap/view',
         creationParams: params,
         creationParamsCodec: const StandardMessageCodec(),
         onPlatformViewCreated: _created,
         gestureRecognizers: gestures,
       ),
-      _ => const Center(child: Text('GLMap lab supports iOS and Android.')),
+      _ => const Center(child: Text('GLMap supports iOS and Android.')),
     };
   }
 }

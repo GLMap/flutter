@@ -27,7 +27,7 @@ final class VectorLayerBridge {
             guard let objects else { throw error("missing_geometry", "Call replace before setStyle") }
             next = objects
         }
-        layer.setVectorObjects(next, with: style, updateCompletion: { result in
+        layer.setVectorObjects(next, with: style, completion: { result in
             let reply: VectorReply
             switch result {
             case .ready: reply = .ready
@@ -57,7 +57,7 @@ final class VectorLayerBridge {
                 throw error("invalid_geometry", "A line needs zero or at least two points")
             }
             if values.isEmpty { return GLMapVectorObjectArray() }
-            guard let address = values.baseAddress, let result = GLMapLabBuildPacked(address, values.count) else {
+            guard let address = values.baseAddress, let result = GLMapFlutterBuildPacked(address, values.count) else {
                 throw error("invalid_geometry", "Invalid packed line")
             }
             return result
@@ -75,7 +75,7 @@ final class VectorLayerBridge {
         return nil
     }
 
-    // Lab readback from actual native input objects, not from Dart arguments.
+    // Readback from actual native input objects, not from Dart arguments.
     func diagnostics(id: Int64) -> [String: Any] {
         var result: [String: Any] = ["id": id, "objectCount": objects?.count ?? 0]
         if let objects, objects.count > 0 {

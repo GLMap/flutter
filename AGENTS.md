@@ -9,6 +9,8 @@ on the public Dart API, platform bridges, examples and tests.
 - `glmap`, `glsearch` and `glroute` depend on Core, not on one another.
 - Search and Route must remain usable without a map widget or renderer.
 - Keep public API documentation and examples in sync with behavior changes.
+- The default example entry opens the shared catalog. Lifecycle and vector samples
+  use the public SDK and remain available as explicit entry points.
 
 ## Implementation and checks
 
@@ -18,9 +20,12 @@ on the public Dart API, platform bridges, examples and tests.
   queries and routes. Test removal, repeated disposal and concurrent operations.
 - Use the native dependency versions recorded in `native-sdk.json`; do not
   silently substitute older releases or add machine-specific paths.
-- Run `flutter analyze` and `python3 scripts/check-modules.py`. Re-run the relevant
-  Android and iOS integration suites for API or platform changes, and the API and
-  lifecycle suites whenever the native dependency version changes.
+- Run `flutter analyze`, `python3 scripts/check-modules.py`,
+  `python3 scripts/check-example.py`, `python3 scripts/check-vector-api.py`
+  and the host tests in `example/test/`.
+  Re-run the relevant Android and iOS integration suites for API or platform
+  changes, and the API and lifecycle suites whenever the native dependency
+  version changes.
 - Report checks actually performed. Distinguish emulator/simulator runs, unsigned
   device builds, signed physical-device runs and authenticated service tests.
   See [VERIFICATION.md](VERIFICATION.md) for test coverage and reporting guidance.

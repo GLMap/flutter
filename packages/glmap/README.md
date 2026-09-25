@@ -57,8 +57,15 @@ Map display requires map data or access to the online service. See the
   removed. Pending operations settle with an error instead of remaining open.
 - `captureState()` returns a snapshot. Await a camera command before capture if
   the order matters; the snapshot does not follow later camera changes.
+- `diagnostics()` uses the same generated, per-view Pigeon API as camera calls.
+  It reports native view counters and target camera values, not a render-aligned
+  snapshot. Pending diagnostics also settle when their map is removed.
 - Vector layers and drawing handles belong to one map. Do not reuse them on
   another map or after removal.
+- `replace()` and `setStyle()` preserve the SDK's terminal preparation result:
+  `ready`, `superseded`, `cancelled` or `failed`. A paused/detached map may keep an
+  update pending until rendering resumes, it is superseded, or the layer is
+  released. `ready` means batches are installed, not that a frame was displayed.
 - Search's `pickObject` extension is available by importing `glsearch`; it is not
   an implicit dependency of Map.
 - Route drawing accepts Core's `GLMapTrackSource`, so Map does not need to import

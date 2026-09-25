@@ -1,4 +1,4 @@
-package software.globus.lab.glmap_lab_example
+package software.globus.glmap.flutter.demo
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,13 +1,20 @@
 import XCTest
 
-final class StageAViewTests: XCTestCase {
+final class LifecycleViewTests: XCTestCase {
     private let app = XCUIApplication()
 
     override func setUpWithError() throws {
-        continueAfterFailure = true
+        continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
         app.launch()
+        XCTAssertTrue(app.buttons["Lifecycle sample"].waitForExistence(timeout: 25))
+        app.buttons["Lifecycle sample"].tap()
         XCTAssertTrue(app.buttons["Read state"].waitForExistence(timeout: 20))
+        let ready = expectation(
+            for: NSPredicate(format: "label CONTAINS 'zoom 5.00'"),
+            evaluatedWith: app.descendants(matching: .any)["native-state"]
+        )
+        wait(for: [ready], timeout: 20)
     }
 
     private func readState() -> String {
@@ -17,7 +24,7 @@ final class StageAViewTests: XCTestCase {
         let state = app.descendants(matching: .any)["native-state"]
         XCTAssertTrue(state.waitForExistence(timeout: 5))
         let value = state.label
-        print("GLMapLabTest: \(value)")
+        print("GLMapLifecycleTest: \(value)")
         return value
     }
 
@@ -44,8 +51,7 @@ final class StageAViewTests: XCTestCase {
         // XCUITest chooses the two-finger trajectory. Remove the overlay so neither
         // synthesized finger lands on the Flutter text field instead of the map.
         app.buttons["Toggle overlay"].tap()
-        // Scale 4 stayed below the native pitch recognizer's 30 pt movement
-        // decision threshold in the RN experiment. Exercise a longer path here.
+        // Use a path longer than the native pitch recognizer's 30 pt threshold.
         canvas.pinch(withScale: 8, velocity: 1)
         app.buttons["Toggle overlay"].tap()
         let pinched = readState()

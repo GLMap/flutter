@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
-        android:label="glmap_lab_example"
+        android:label="GLMap Flutter Demo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

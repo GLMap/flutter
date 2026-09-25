@@ -1,5 +1,5 @@
-name: glmap_lab_example
-description: GLMap cross-platform lab — Flutter stage A.
+name: glmap_example
+description: GLMap Flutter demo catalog and public API lifecycle examples.
 publish_to: none
 resolution: workspace
 version: 0.0.1+1

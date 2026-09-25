@@ -7,8 +7,8 @@ import 'package:glsearch/glsearch.dart';
 import 'package:glroute/glroute.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:glmap_lab_example/demo/common.dart';
-import 'package:glmap_lab_example/demo/routing_examples.dart';
+import 'package:glmap_example/demo/common.dart';
+import 'package:glmap_example/demo/routing_examples.dart';
 
 // Run online_test.dart with --no-uninstall first. This is a separate process:
 // no bundled datasets, catalog refresh or download calls are allowed here.

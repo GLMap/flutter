@@ -12,13 +12,17 @@ From the repository root:
 flutter pub get
 flutter analyze
 python3 scripts/check-modules.py
+python3 scripts/check-example.py
+python3 scripts/check-vector-api.py
+(cd example && flutter test test)
 ```
 
 Run the main integration suites from `example/` on each platform:
 
 ```sh
 flutter test integration_test/demo_test.dart integration_test/api_test.dart \
-  integration_test/vector_test.dart -d <device-id>
+  integration_test/vector_test.dart integration_test/lifecycle_test.dart \
+  integration_test/vector_demo_test.dart -d <device-id>
 ```
 
 | Suite | Coverage |
@@ -26,7 +30,7 @@ flutter test integration_test/demo_test.dart integration_test/api_test.dart \
 | `demo_test.dart` | Demo catalog, bundled data, offline search, custom-route tracking, hit testing and drawable ownership |
 | `api_test.dart` | Camera/state API, input validation, concurrent captures and map disposal isolation |
 | `vector_test.dart` | Geometry retention, style updates, rejection, ordered updates and layer removal |
-| `stage_a_test.dart` | Map embedding, overlays, navigation and repeated disposal |
+| `lifecycle_test.dart` | Public map embedding, overlays, navigation, repeated disposal and stale diagnostics/capture rejection |
 | `vector_demo_test.dart` | Vector sample interactions |
 | `online_test.dart` | Authenticated search, road routes, downloads and transfer events |
 | `offline_restore_test.dart` | Reuse of downloaded data after a fresh process starts |
@@ -71,29 +75,36 @@ contain the API key.
 
 ### Native gestures and location
 
-Use `lib/demo_main.dart` for the native demo input tests. On iOS, configure the
-entry point before running the included UI test scheme:
+Both native input suites use the default catalog entry, `lib/main.dart`.
+`LifecycleViewTests` / `LifecycleViewTest` open **Lifecycle sample** from the
+catalog toolbar; the catalog tests exercise drawings and foreground location.
+On iOS, configure the default entry before running the UI test scheme:
 
 ```sh
-flutter build ios --simulator --debug --config-only -t lib/demo_main.dart
+flutter build ios --simulator --debug --config-only
 xcrun simctl location <simulator-id> set 42.4341,19.2600
-xcodebuild -project ios/Runner.xcodeproj -scheme StageA \
+xcodebuild -project ios/Runner.xcodeproj -scheme DemoTests \
   -destination 'platform=iOS Simulator,id=<simulator-id>' \
-  -parallel-testing-enabled NO -only-testing:RunnerUITests/DemoCatalogTests \
+  -parallel-testing-enabled NO -collect-test-diagnostics never \
   CODE_SIGNING_ALLOWED=NO test
 ```
 
-On Android, select the included `DemoCatalogTest` instrumentation class in Android
-Studio and set the Flutter entry point to `lib/demo_main.dart` (Gradle property
-`target`). Feed the emulator's location while the test runs:
+The standard `Runner` scheme also includes the Swift `RunnerTests` unit tests.
+They check registration of the actual map plugin and its platform-view creation
+codec; they do not call a placeholder platform-version API.
+
+On Android, run `DemoCatalogTest` and `LifecycleViewTest` from the generated app
+build using the default Flutter entry. Both test classes belong to
+`software.globus.glmap.flutter.demo`. Feed the emulator's location while the
+catalog location test runs:
 
 ```sh
 adb -s <emulator-id> emu geo fix 19.2600 42.4341
 ```
 
-Run only the input test class matching the entry point. Allow foreground location
-access when prompted. See [recorded results](#recorded-results) for outcomes and
-remaining device/service checks.
+Allow foreground location access when prompted. Input tests use native gestures,
+not synthetic Dart tap callbacks. See [recorded results](#recorded-results) for
+actual target types and service/device coverage.
 
 ### Headless module checks
 
@@ -134,6 +145,73 @@ these runs.
 The saved integration logs do not identify the target devices. Their pass counts
 do not establish signed physical-device coverage; record the target type explicitly
 when repeating these suites.
+
+### Catalog and channel cleanup validation
+
+The cleanup was checked on **2026-09-25**. The
+[run summary](tests/results/flutter-demo-cleanup.json) records the tested source
+fingerprint, toolchain, commands and target types.
+
+| Check | Outcome |
+| --- | --- |
+| Dart analysis, package boundaries and example identity checks | Passed |
+| Host widget/channel tests | 2/2, including default entry and diagnostics disposal/late replies |
+| Pigeon regeneration | Dart/Kotlin/Swift generated together; repeated generation and formatting produced identical output |
+| Android integration suites | 10/10 on an arm64 Android 14 emulator |
+| iOS integration suites | 10/10 on an arm64 iPhone 17 / iOS 27.0 simulator |
+| Catalog coverage | All 20 screens opened, performed their bundled/offline actions and closed on both platforms |
+| Android native input tests | 2/2 through AndroidJUnitRunner using the Gradle-built Debug app/test APKs |
+| iOS native input tests | 5/5 through the `DemoTests` scheme |
+| iOS registration unit tests | 2/2 through `Runner`, testing the actual linked plugin and creation codec |
+| Android Release APK | Built; this is not a separate Release runtime suite |
+| iOS device Release app | Built without signing; not installed or run on a physical device |
+| Native identities and Core resources | Android Debug/Release build IDs and iOS simulator/device framework UUIDs/resources matched the selected SDK |
+| Documentation and whitespace checks | Passed |
+
+Native validation used prebuilt `2.2.0-dev.515481f9f` artifacts through an explicit
+local override. Native and Swift package revisions matched `native-sdk.json`, and
+neither the native pin nor the dependency lock changed. These runs do not validate
+public Maven/SwiftPM release resolution. Location tests used injected emulator or
+simulator positions, not physical GPS or authenticated online services.
+
+Earlier Android UI attempts exposed assumptions in the input harness: it checked
+the resumed semantics tree too early, and its generic pinch path could intersect
+Flutter controls or stay below the native gesture threshold. The final harness
+waits for the current screen, keeps both fingers on the native map, and checks an
+actual zoom increase. A separate attempt lost its emulator before test execution;
+the final two tests ran directly with AndroidJUnitRunner on a fresh emulator.
+
+A Release build immediately after integration testing encountered a stale generated
+plugin registrant with a Debug-only integration-test plugin. Running the normal
+build with dependency/plugin refresh regenerated it and the build passed; no
+generated registrant was hand-edited. Non-fatal toolchain warnings remain.
+No signed physical-device, authenticated-service, downloaded-data restoration or
+new standalone headless runtime checks are claimed for this change.
+
+### Unified native vector completions
+
+The status-bearing `setVectorObject(s)` API was validated on **2026-09-25** with
+native SDK `2.2.0-dev.05553b111`. The native/Swift revisions are recorded in
+`native-sdk.json`; [vector-status.json](tests/results/vector-status.json) records
+the tested source fingerprint and artifact provenance. The Android call uses
+`setVectorObjects(..., UpdateCompletion)`, and Apple uses `completion:` with a
+`GLMapVectorLayerUpdateResult`. Flutter preserves all four terminal outcomes.
+
+- Android 14 arm64 emulator: **10/10** integration scenarios passed, including
+  concurrent vector updates, supersession, removal cancellation and disposal.
+- iPhone 17 / iOS 27.0 arm64 simulator: the same **10/10** scenarios passed.
+- Dart analysis, host widget/channel tests, module/example checks and the new
+  `scripts/check-vector-api.py` check passed. The API check also inspected the
+  actual packaged Android class and Apple headers, not only wrapper source.
+- Android and iOS simulator native IDs and Core resources matched the newly built
+  SDK artifacts. Native SDK libraries were built for Android and Apple simulator/
+  device; this is not a new signed device run or wrapper-device-build claim.
+
+The native SDK was built with its existing working-tree delta, recorded by the
+SDK manifest hash in the result. No native source was edited for this wrapper
+migration. These local-artifact runs do not establish public dependency resolution,
+authenticated-service coverage, headless runtime coverage or new full UI coverage.
+Earlier results above retain their original SDK/version scope.
 
 ## Release validation
 

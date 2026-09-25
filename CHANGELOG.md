@@ -8,4 +8,8 @@
   route tracking. Search and Route can be used without the map renderer.
 - Include a 20-screen demo catalog and Android/iOS integration coverage for API
   behavior, cancellation, ownership and lifecycle handling.
+- Open the shared catalog by default and keep lifecycle/vector samples on the
+  public SDK API, with current Android/iOS application and test identities.
+- Route map diagnostics through the generated Pigeon API, including disposal and
+  late-reply handling.
 - Target Android API 24+ and iOS 16.4+ with native SDK 2.2.0.

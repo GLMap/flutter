@@ -1,1 +1,1 @@
-rootProject.name = "glmap_lab"
+rootProject.name = "glmap"

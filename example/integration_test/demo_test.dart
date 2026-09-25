@@ -9,8 +9,8 @@ import 'package:glsearch/glsearch.dart';
 import 'package:glroute/glroute.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:glmap_lab_example/demo_main.dart' as demo;
-import 'package:glmap_lab_example/demo/common.dart';
+import 'package:glmap_example/main.dart' as demo;
+import 'package:glmap_example/demo/common.dart';
 
 Future<void> settle(WidgetTester tester) async {
   for (var i = 0; i < 100; i++) {

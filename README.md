@@ -158,7 +158,7 @@ cd glmap_flutter
 flutter pub get
 flutter devices
 cd example
-flutter run -t lib/demo_main.dart -d <device-id>
+flutter run -d <device-id>
 ```
 
 If you already have this repository, skip the clone and start from its root.
@@ -166,14 +166,16 @@ Use an Android device/emulator or an iOS device/simulator that meets the
 [requirements](#requirements).
 The Dart workspace connects the demo to the packages in `packages/` automatically.
 
-Use **`lib/demo_main.dart`** to open the catalog; the default `lib/main.dart` is a
-separate lifecycle sample. Start with **Dark Theme** or **Search** to explore the
-bundled offline data. Online features and downloads require a suitable API key:
+The default **`lib/main.dart`** opens the catalog; no alternate entry point is
+needed. All screens share the same Dart implementation on Android and iOS. The
+**Lifecycle sample** toolbar action opens the focused embedding/disposal example.
+Start with **Dark Theme** or **Search** to explore the bundled offline data.
+Online features and downloads require a suitable API key:
 enter one with the catalog's key button for the current session, or create
 `example/config/local.json` in the format shown above and run from `example/`:
 
 ```sh
-flutter run -t lib/demo_main.dart -d <device-id> \
+flutter run -d <device-id> \
   --dart-define-from-file=config/local.json
 ```
 

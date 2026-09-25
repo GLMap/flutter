@@ -5,8 +5,9 @@ screen keeps its SDK calls close to its UI so you can find a feature, read the
 implementation and adapt it to your app.
 
 For requirements, launch commands and API-key setup, see
-[Run the demo](../README.md#run-the-demo). The catalog entry point is
-**`lib/demo_main.dart`**, not `lib/main.dart`.
+[Run the demo](../README.md#run-the-demo). The default **`lib/main.dart`** opens the
+catalog on both platforms. `lib/demo_main.dart` contains its implementation and
+also remains directly runnable.
 
 ## Directory structure
 
@@ -20,8 +21,9 @@ example/
 │   │   ├── draw_examples.dart    # Images, markers, vectors, tracks and location
 │   │   ├── search_examples.dart  # Search UI and map-object picking
 │   │   ├── routing_examples.dart # Route building and navigation tracking
-│   │   └── download_examples.dart# Regional and bounding-box downloads
-│   ├── main.dart                 # Focused embedding and lifecycle sample
+│   │   └── download_examples.dart # Regional and bounding-box downloads
+│   ├── main.dart                 # Default entry: starts the catalog
+│   ├── lifecycle_main.dart       # Focused embedding and lifecycle sample
 │   └── vector_main.dart          # Focused vector-layer sample
 ├── assets/                       # Bundled datasets and sample geometry/config
 ├── integration_test/             # Flutter tests using the native plugins
@@ -37,7 +39,8 @@ those packages, not to the demo's platform host directories.
 
 ## Startup and screen lifecycle
 
-1. [`demo_main.dart`](lib/demo_main.dart) initializes Flutter, then calls
+1. [`main.dart`](lib/main.dart) forwards to the catalog implementation in
+   [`demo_main.dart`](lib/demo_main.dart), which initializes Flutter and calls
    `GLMapSDK.initialize` with `GLMAP_API_KEY` from the build environment.
 2. It registers `assets/Montenegro.vm` with `GLMapSDK.addAssetDataSet` for offline
    map display and search. An initialization failure is shown in the catalog.
@@ -108,10 +111,17 @@ Assets are declared in [`pubspec.yaml`](pubspec.yaml):
 Keep routing configuration compatible with the native SDK. Map data is
 © OpenStreetMap contributors; native SDK and data terms also apply.
 
-[`lib/main.dart`](lib/main.dart) demonstrates embedding, Flutter overlays,
-navigation and repeated map removal. [`lib/vector_main.dart`](lib/vector_main.dart)
-demonstrates vector geometry/style updates. Run either with its own `-t` entry
-point; neither opens the catalog.
+[`lib/lifecycle_main.dart`](lib/lifecycle_main.dart) demonstrates embedding,
+Flutter overlays, navigation and repeated map removal. Open it with the catalog's
+**Lifecycle sample** toolbar action or `flutter run -t lib/lifecycle_main.dart`.
+[`lib/vector_main.dart`](lib/vector_main.dart) demonstrates vector geometry/style
+updates and can be run with its own `-t` entry point.
+
+Both samples initialize Core when launched directly and draw through the public
+controller API. Opening the lifecycle screen from the catalog reuses its initialized
+SDK and session key. There is no separate native demo renderer. The app name is
+**GLMap Flutter Demo**, its Dart package is `glmap_example`, and its Android/iOS
+application identifier is `software.globus.glmap.flutter.demo`.
 
 ## Add or change an example
 
@@ -128,7 +138,7 @@ point; neither opens the catalog.
 
 `integration_test/demo_test.dart` covers the catalog. `api_test.dart` and
 `vector_test.dart` exercise native API and lifecycle behavior. The focused entry
-points have `stage_a_test.dart` and `vector_demo_test.dart`; authenticated services
+points have `lifecycle_test.dart` and `vector_demo_test.dart`; authenticated services
 and retained downloads have `online_test.dart` and `offline_restore_test.dart`.
 
 See [VERIFICATION.md](../VERIFICATION.md) for test commands, screenshot capture,

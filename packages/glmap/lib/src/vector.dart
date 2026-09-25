@@ -42,7 +42,19 @@ class GLMapGeometry {
 }
 
 /// Native preparation outcome for this request. Ready does not imply a displayed frame.
-enum GLMapVectorUpdateResult { ready, superseded, cancelled, failed }
+enum GLMapVectorUpdateResult {
+  /// Prepared batches were installed, not necessarily presented in a frame.
+  ready,
+
+  /// A newer request replaced this request before preparation began.
+  superseded,
+
+  /// Removal, release or loss of the rendering surface cancelled preparation.
+  cancelled,
+
+  /// Preparation failed; previously installed batches are preserved.
+  failed,
+}
 
 /// A vector layer belongs to its creating map; it cannot be transferred between maps.
 class GLMapVectorLayer {

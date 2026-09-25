@@ -24,7 +24,23 @@ internal class MapApiBridge(
     private val layers = mutableMapOf<Long, VectorLayerBridge>()
     private val creations = mutableMapOf<Long, (Result<Long>) -> Unit>()
 
+    private var taps = 0
+    private var moves = 0
+
     init { MapHostApi.setUp(messenger, this, suffix) }
+
+    fun recordTap() { if (map != null) taps++ }
+    fun recordMove() { if (map != null) moves++ }
+
+    override fun diagnostics(): Map<String, Any?> {
+        val view = map ?: throw MapApiError("map_disposed", "The map has been removed")
+        val center = view.renderer.mapGeoCenter
+        return mapOf("latitude" to center.lat, "longitude" to center.lon,
+            "zoom" to view.renderer.mapZoom, "angle" to view.renderer.mapAngle,
+            "taps" to taps, "moves" to moves, "width" to view.width, "height" to view.height,
+            "surfaceAvailable" to view.isAvailable, "initializationResult" to true,
+            "sdk" to "GLMap", "vectorLayers" to vectorDiagnostics())
+    }
 
     private fun activeMap(): GLMapTextureView {
         val view = map ?: throw MapApiError("map_disposed", "The map has been removed")

@@ -2,7 +2,7 @@
 #import <GLMapCore/GeometryBuilder.h>
 #include <math.h>
 
-GLMapVectorObjectArray *GLMapLabBuildPacked(const double *values, NSInteger count) {
+GLMapVectorObjectArray *GLMapFlutterBuildPacked(const double *values, NSInteger count) {
     if (!values || count < 4 || count % 2 || count / 2 > INT32_MAX) return nil;
     for (NSInteger i = 0; i < count; i += 2) {
         double lon = values[i], lat = values[i + 1];

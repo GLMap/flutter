@@ -13,6 +13,20 @@ final class MapApiBridge: MapHostApi {
     private var captures: [Int: CheckedContinuation<MapStateMessage, Error>] = [:]
     private var nextLayer: Int64 = 0
     private var layers: [Int64: VectorLayerBridge] = [:]
+    private var taps = 0
+    private var moves = 0
+
+    func recordTap() { if map != nil { taps += 1 } }
+    func recordMove() { if map != nil { moves += 1 } }
+
+    func diagnostics() throws -> [String: Any?] {
+        let map = try ownedMap()
+        return ["latitude": map.mapGeoCenter.lat, "longitude": map.mapGeoCenter.lon,
+                "zoom": map.mapZoomLevel, "angle": map.mapAngle,
+                "taps": taps, "moves": moves, "width": map.bounds.width, "height": map.bounds.height,
+                "surfaceAvailable": map.window != nil, "initializationResult": true,
+                "sdk": "GLMap", "vectorLayers": vectorDiagnostics()]
+    }
 
     init(map: GLMapView, messenger: FlutterBinaryMessenger, id: Int64, failure: String?) {
         self.map = map

@@ -9,6 +9,7 @@ import 'demo/search_examples.dart';
 import 'demo/routing_examples.dart';
 import 'demo/download_examples.dart';
 import 'demo/common.dart';
+import 'lifecycle_main.dart' as lifecycle;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -275,6 +276,28 @@ class _DemoCatalogState extends State<DemoCatalog> {
       appBar: AppBar(
         title: const Text('GLMap · Flutter'),
         actions: [
+          IconButton(
+            key: const Key('open-lifecycle'),
+            tooltip: 'Lifecycle sample',
+            icon: const Icon(Icons.science_outlined),
+            onPressed: () async {
+              try {
+                final fixture = await lifecycle.loadLifecycleFixture();
+                if (!context.mounted) return;
+                await Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => lifecycle.LifecycleScreen(fixture: fixture),
+                  ),
+                );
+              } catch (error) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(describeError(error))));
+                }
+              }
+            },
+          ),
           IconButton(
             tooltip: 'SDK API key',
             onPressed: configureKey,

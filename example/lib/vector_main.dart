@@ -6,11 +6,12 @@ import 'package:glmap/glmap.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GLMapSDK.initialize(
+    apiKey: const String.fromEnvironment('GLMAP_API_KEY'),
+  );
   final fixture = jsonDecode(
     await rootBundle.loadString('assets/stage-a.json'),
   ) as Map<String, dynamic>;
-  // This demo draws its track through the public Dart API.
-  fixture['trackJson'] = '{"type":"FeatureCollection","features":[]}';
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -63,7 +64,13 @@ class _VectorDemoState extends State<VectorDemo> {
       children: [
         Positioned.fill(
           child: GLMap(
-            fixture: widget.fixture,
+            initialCenter: GLMapGeoPoint(
+              latitude: (widget.fixture['camera']['latitude'] as num)
+                  .toDouble(),
+              longitude: (widget.fixture['camera']['longitude'] as num)
+                  .toDouble(),
+            ),
+            initialZoom: (widget.fixture['camera']['zoom'] as num).toDouble(),
             onCreated: (value) {
               controller = value;
               action('Draw', draw);

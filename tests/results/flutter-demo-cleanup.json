@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "suite": "flutter-catalog-and-channel-cleanup",
+  "date": "2026-09-25",
+  "baseRevision": "eed040ac5ff29920324449a73fc3a17605f1f08a",
+  "sourceState": "Working tree with default catalog, public lifecycle/vector samples, current host identities and Pigeon diagnostics",
+  "testedSourceFingerprint": {
+    "algorithm": "SHA-256 of sorted source/configuration paths, NUL, and each file's binary SHA-256; excludes tests/results and ignored files",
+    "extensions": [".dart", ".kt", ".kts", ".swift", ".m", ".h", ".yaml", ".json", ".py", ".xml", ".plist", ".pbxproj", ".xcscheme"],
+    "sha256": "cc62232b9f51a0fbbb9e736b73c980040875635128bd234701efc3a96c5f3b4c",
+    "files": 135
+  },
+  "native": {
+    "version": "2.2.0-dev.515481f9f",
+    "sourceRevision": "515481f9f8e84711ccbc19e2395605959ad81540",
+    "swiftPackageRevision": "04f1a99d51045456896eb7cca3fb15fb5b570866",
+    "resolution": "Explicit local prebuilt SDK override matching native-sdk.json",
+    "publicReleaseResolutionValidated": false
+  },
+  "toolchain": {
+    "flutter": "3.47.4",
+    "dart": "3.13.3",
+    "pigeon": "29.0.1",
+    "xcode": "27.0 (27A266a)"
+  },
+  "hostChecks": {
+    "flutterAnalyze": "PASS",
+    "moduleBoundaries": "PASS: four packages",
+    "exampleLayoutAndIdentities": "PASS",
+    "dartWidgetAndChannelTests": {"passed": 2, "failed": 0},
+    "pigeonRegeneration": "PASS: Dart, Kotlin and Swift regenerated together; repeat generation plus dart format is identical",
+    "documentationLinksSyntaxWhitespace": "PASS"
+  },
+  "integrationCommand": "flutter test --no-pub integration_test/demo_test.dart integration_test/api_test.dart integration_test/vector_test.dart integration_test/lifecycle_test.dart integration_test/vector_demo_test.dart -d <target> --dart-define=GLMAP_API_KEY=",
+  "android": {
+    "targetType": "arm64 emulator",
+    "os": "Android 14",
+    "integrationConfiguration": "Debug",
+    "integration": {"passed": 10, "failed": 0},
+    "nativeUi": {"passed": 2, "failed": 0},
+    "nativeUiCommand": "adb -s <emulator> shell am instrument -w -r software.globus.glmap.flutter.demo.test/androidx.test.runner.AndroidJUnitRunner",
+    "nativeUiNote": "Debug app and instrumentation APKs were built by Gradle and installed with adb; final run used direct AndroidJUnitRunner execution",
+    "releaseBuild": "PASS: build only",
+    "gps": "Injected emulator coordinates for the foreground-location test"
+  },
+  "ios": {
+    "targetType": "arm64 iPhone 17 simulator",
+    "os": "iOS 27.0",
+    "integrationConfiguration": "Debug",
+    "integration": {"passed": 10, "failed": 0},
+    "registrationUnitTests": {"passed": 2, "failed": 0},
+    "nativeUi": {"passed": 5, "failed": 0},
+    "unitCommand": "xcodebuild -project example/ios/Runner.xcodeproj -scheme Runner -only-testing:RunnerTests -destination 'platform=iOS Simulator,id=<target>' -parallel-testing-enabled NO -collect-test-diagnostics never CODE_SIGNING_ALLOWED=NO test",
+    "nativeUiCommand": "xcodebuild -project ios/Runner.xcodeproj -scheme DemoTests -destination 'platform=iOS Simulator,id=<target>' -parallel-testing-enabled NO -collect-test-diagnostics never CODE_SIGNING_ALLOWED=NO test",
+    "gps": "Simulator location override for the foreground-location test",
+    "unsignedDeviceReleaseBuild": "PASS: not installed or executed on a physical device"
+  },
+  "artifactChecks": {
+    "androidDebugAndReleaseNativeIdsAndResources": "PASS",
+    "iosSimulatorAndDeviceNativeUuidsAndResources": "PASS"
+  },
+  "coverage": [
+    "Default catalog and all twenty example screens with bundled/offline actions",
+    "Typed camera state, concurrent capture and map isolation",
+    "Vector ownership, ordered updates, removal and repeated disposal",
+    "Pigeon diagnostics routing, pending-disposal rejection and ignored late replies",
+    "Real native taps, long presses, pinch, rotation, keyboard and background/resume",
+    "Current iOS plugin registration and platform-view creation codec"
+  ],
+  "limitations": [
+    "No signed physical-device run",
+    "No authenticated service or fresh-process downloaded-data restoration test",
+    "No new headless runtime run or package publication",
+    "Public release dependency resolution was not validated"
+  ]
+}

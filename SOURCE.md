@@ -43,7 +43,10 @@ and both services must work without a map widget.
 Swift implementation targets use distinct names such as `GlobusMapFlutter`.
 Small Objective-C registration targets expose Flutter's module names without
 colliding with native SDK modules on case-insensitive filesystems. Keep these
-registration targets separate when updating iOS bridges.
+registration targets separate when updating iOS bridges. Map diagnostics belong
+to the generated per-view `MapHostApi`; do not add a parallel ad-hoc channel for
+those calls. Dart, Android and iOS use the platform-view identifier
+`software.globus.glmap/view`.
 
 ## Change a channel API
 
@@ -54,6 +57,7 @@ registration targets separate when updating iOS bridges.
    cd packages/glmap
    dart run pigeon --input pigeons/map.dart
    dart run pigeon --input pigeons/features.dart
+   dart format lib/src/map.g.dart lib/src/features.g.dart
    ```
 
    The other schemas are `packages/glmap_core/pigeons/core.dart`,

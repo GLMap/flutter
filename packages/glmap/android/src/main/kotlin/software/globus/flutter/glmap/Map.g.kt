@@ -455,6 +455,7 @@ private open class MapPigeonCodec : StandardMessageCodec() {
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface MapHostApi {
+  fun diagnostics(): Map<String, Any?>
   suspend fun captureState(): MapStateMessage
   fun setCamera(camera: MapCameraMessage)
   fun createVectorLayer(drawOrder: Long, callback: (Result<Long>) -> Unit)
@@ -471,6 +472,21 @@ interface MapHostApi {
     @JvmOverloads
     fun setUp(binaryMessenger: BinaryMessenger, api: MapHostApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.glmap.MapHostApi.diagnostics$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.diagnostics())
+            } catch (exception: Throwable) {
+              MapPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.glmap.MapHostApi.captureState$separatedMessageChannelSuffix", codec)
         if (api != null) {

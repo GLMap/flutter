@@ -18,7 +18,7 @@ internal class VectorLayerBridge(drawOrder: Int) {
             val next = if (replacing) geometry(mutation) else
                 objects ?: throw MapApiError("missing_geometry", "Call replace before setStyle")
             try {
-                layer.setVectorObjectsWithResult(next, style) { result ->
+                layer.setVectorObjects(next, style) { result ->
                     callback(when (result) {
                         GLMapVectorLayer.UpdateResult.Ready -> Result.success(VectorReply.READY)
                         GLMapVectorLayer.UpdateResult.Superseded -> Result.success(VectorReply.SUPERSEDED)

@@ -445,6 +445,7 @@ class MapPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol MapHostApi {
+  func diagnostics() throws -> [String: Any?]
   func captureState() async throws -> MapStateMessage
   func setCamera(camera: MapCameraMessage) throws
   func createVectorLayer(drawOrder: Int64, completion: @escaping (Result<Int64, Error>) -> Void)
@@ -459,6 +460,19 @@ class MapHostApiSetup {
   /// Sets up an instance of `MapHostApi` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: MapHostApi?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let diagnosticsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.glmap.MapHostApi.diagnostics\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      diagnosticsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.diagnostics()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      diagnosticsChannel.setMessageHandler(nil)
+    }
     let captureStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.glmap.MapHostApi.captureState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       captureStateChannel.setMessageHandler { _, reply in

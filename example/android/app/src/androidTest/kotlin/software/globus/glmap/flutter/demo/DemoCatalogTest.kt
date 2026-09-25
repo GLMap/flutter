@@ -1,4 +1,4 @@
-package software.globus.lab.glmap_lab_example
+package software.globus.glmap.flutter.demo
 
 import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -17,7 +17,7 @@ class DemoCatalogTest {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         val context = instrumentation.targetContext
         val device = UiDevice.getInstance(instrumentation)
-        context.startActivity(context.packageManager.getLaunchIntentForPackage(context.packageName)!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        context.startActivity(context.packageManager.getLaunchIntentForPackage(context.packageName)!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
         fun open(title: String) {
             val field = checkNotNull(device.wait(Until.findObject(By.clazz("android.widget.EditText")), 20000))
             field.click()

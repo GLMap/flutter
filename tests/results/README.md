@@ -5,8 +5,14 @@ and the release-validation procedure.
 
 ## Contents
 
-- `android-integration.txt` and `ios-integration.txt`: saved output from the demo,
-  API/lifecycle and vector integration suites.
+- [vector-status.json](vector-status.json): unified native vector completion API,
+  current SDK/source identities and Android/iOS API/lifecycle validation.
+
+- [flutter-demo-cleanup.json](flutter-demo-cleanup.json): current catalog/channel
+  cleanup validation, with source fingerprint, build/test commands and explicit
+  emulator/simulator/device-build distinctions.
+- `android-integration.txt` and `ios-integration.txt`: earlier saved output from
+  the demo, API/lifecycle and vector integration suites.
 - `headless-android-*.txt` and `headless-ios-*.txt`: Core-only, Search-only and
   Route-only test output.
 - `headless-android-libraries.json` and `headless-ios-frameworks.json`: recorded

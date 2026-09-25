@@ -7,7 +7,7 @@ import 'package:glsearch/glsearch.dart';
 import 'package:glroute/glroute.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:glmap_lab_example/demo/common.dart';
+import 'package:glmap_example/demo/common.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

@@ -70,6 +70,8 @@ class VectorMutationMessage {
 
 @HostApi()
 abstract class MapHostApi {
+  // Non-render-aligned diagnostics; captureState is the camera snapshot API.
+  Map<String, Object?> diagnostics();
   @async
   MapStateMessage captureState();
   void setCamera(MapCameraMessage camera);
