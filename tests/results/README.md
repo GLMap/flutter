@@ -5,8 +5,10 @@ and the release-validation procedure.
 
 ## Contents
 
-- [vector-status.json](vector-status.json): unified native vector completion API,
-  current SDK/source identities and Android/iOS API/lifecycle validation.
+- [release-2.2.0.json](release-2.2.0.json): public GLMap 2.2.0 dependency resolution,
+  artifact identities and Android/iOS API, lifecycle and demo validation.
+- [vector-status.json](vector-status.json): earlier dev SDK vector completion API,
+  source identities and Android/iOS API/lifecycle validation.
 
 - [flutter-demo-cleanup.json](flutter-demo-cleanup.json): current catalog/channel
   cleanup validation, with source fingerprint, build/test commands and explicit

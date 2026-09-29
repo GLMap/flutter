@@ -1,3 +1,11 @@
+## Native SDK 2.2.0 release update
+
+- Pin the published GLMap 2.2.0 native and SwiftPM revisions; use public Maven
+  and SwiftPM artifacts for the plugins and demo.
+- Document native rebuild requirements and add dependency-pin consistency checks.
+- Keep Flutter package versions independent at `0.1.0-beta.1`. See
+  [VERIFICATION.md](VERIFICATION.md) for checks against the release artifacts.
+
 ## 0.1.0-beta.1
 
 - Provide four Flutter packages: `glmap_core`, `glmap`, `glsearch` and `glroute`.

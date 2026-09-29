@@ -126,6 +126,33 @@ Inspect the resulting APK/framework list as well: a successful run alone does no
 excluded. Expected GLMap libraries are Core alone, Core + Search, or Core + Route;
 none of these apps should include the Map renderer.
 
+## Published GLMap 2.2.0 validation — 2026-09-29
+
+The native release is now pinned to `36a343f9275d76734466ecae1f39b9c0e0655a8b`
+and SwiftPM tag `2.2.0` resolves to `b07267c4bdd7cfcde5e001708c95d897eaa2f19a`.
+The following checks used public Maven/SwiftPM artifacts with `GLMAP_SDK_DIR`
+unset, not the earlier `2.2.0-dev.*` builds. See
+[release-2.2.0.json](tests/results/release-2.2.0.json) for the run summary:
+
+- `flutter pub get`, `flutter analyze`, module/pin, example and vector-call-site
+  checks passed. Both host widget/channel tests passed (**2/2**).
+- Android 17 arm64 emulator: all five integration suites listed above passed
+  (**10/10**), including all 20 catalog screens, API, vector and lifecycle checks.
+- iPhone 17 / iOS 27.0 arm64 simulator: the same suites passed (**10/10**), run as
+  API/lifecycle/vector (**5/5**) and catalog/vector-demo (**5/5**).
+- Both vector suites observed superseded updates and cancellation on removal.
+- The demo's SwiftPM lockfiles record the public release revision. Native
+  dependency consistency is checked by `scripts/check-modules.py`.
+- Packaged Android ELF build IDs and iOS simulator framework UUIDs matched the
+  public 2.2.0 artifacts. Android `world.vm` remained uncompressed; published
+  vector headers/classes expose the required status-bearing completion API.
+
+These are Debug emulator/simulator runs from this workspace, not clean-checkout,
+signed physical-device or authenticated-service validation. No new headless-app,
+full native-gesture, device Release or offline-restoration run is claimed. Prior
+results below remain historical evidence for their original dev SDK versions;
+references there to matching pins refer to the pins at the time of those runs.
+
 ## Recorded results
 
 The verification summary dated **2026-09-24** records the following results.

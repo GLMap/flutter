@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "glmapswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GLMap/GLMapSwift.git",
+      "state" : {
+        "revision" : "b07267c4bdd7cfcde5e001708c95d897eaa2f19a",
+        "version" : "2.2.0"
+      }
+    }
+  ],
+  "version" : 2
+}

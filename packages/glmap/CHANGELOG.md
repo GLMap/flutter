@@ -1,5 +1,8 @@
 ## 0.1.0-beta.1
 
+- Pin the released native GLMap 2.2.0 artifacts on Android and iOS; rebuild the
+  native app when updating. Preserve status-bearing vector completions.
+
 - Add a native map widget and typed camera control/state snapshots.
 - Support gestures, vector geometry, hit testing and map-owned drawing handles.
 - Settle pending operations when a map is removed and reject invalid handle use.

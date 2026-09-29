@@ -19,8 +19,19 @@ examples**.
 - A suitable GLMap API key and network access for online tiles, search, routing
   and downloads. The demo includes data for offline map display and search.
 
-The Flutter plugins depend on native GLMap SDK 2.2.0 through Maven on Android
-and Swift Package Manager on iOS. Configure the host project as described below.
+The Flutter plugins and demo pin the released native **GLMap SDK 2.2.0** through
+the public Maven repository on Android and Swift Package Manager on iOS. The
+Flutter packages have their own version (`0.1.0-beta.1`); it is not the native SDK
+version. Configure the host project as described below.
+
+### Updating to native SDK 2.2.0
+
+Run `flutter pub get` and rebuild the native app on both platforms; hot reload
+alone does not update native frameworks. Keep Core, Map, Search and Route on the
+same native release. Initialize Core before any native API, including headless
+Search/Route calls. Vector updates preserve `Ready`, `Superseded`, `Cancelled`
+and `Failed`; `Ready` means geometry is ready to draw, not that a frame has been
+presented. See [verification](VERIFICATION.md) for release checks and their scope.
 
 ## Add a map to your app
 

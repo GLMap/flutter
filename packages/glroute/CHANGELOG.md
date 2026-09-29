@@ -1,5 +1,8 @@
 ## 0.1.0-beta.1
 
+- Pin the released native GLRoute 2.2.0 artifacts on Android and iOS; rebuild
+  the native app and initialize Core before using Route.
+
 - Add online/offline road routing for car, bicycle and pedestrian modes.
 - Support custom-route construction, route tracking and maneuver state.
 - Expose cancellable route requests and explicit release of native route state.

@@ -9,6 +9,15 @@ For requirements, launch commands and API-key setup, see
 catalog on both platforms. `lib/demo_main.dart` contains its implementation and
 also remains directly runnable.
 
+## Native SDK release
+
+Both hosts use the published GLMap **2.2.0** artifacts through the workspace
+plugins: Maven on Android and exact-version SwiftPM on iOS. After updating the
+checkout, run `flutter pub get` from the repository root and rebuild the demo;
+hot reload is not enough to replace native binaries. No separately built native
+SDK is required. The API, vector and lifecycle suites are described in
+[VERIFICATION.md](../VERIFICATION.md).
+
 ## Directory structure
 
 ```text
