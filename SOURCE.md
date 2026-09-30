@@ -69,7 +69,7 @@ those calls. Dart, Android and iOS use the platform-view identifier
    cancellation and disposal where relevant.
 5. From the repository root, run `flutter analyze` and
    `python3 scripts/check-modules.py`, then the relevant Android and iOS suites
-   described in [VERIFICATION.md](VERIFICATION.md).
+   covered by `example/integration_test/` and the native tests in `example/`.
 
 Commit the schema and regenerated Dart/Kotlin/Swift files together. Do not edit
 generated bindings by hand. Native dependency changes require renewed API and

@@ -15,8 +15,7 @@ Both hosts use the published GLMap **2.2.0** artifacts through the workspace
 plugins: Maven on Android and exact-version SwiftPM on iOS. After updating the
 checkout, run `flutter pub get` from the repository root and rebuild the demo;
 hot reload is not enough to replace native binaries. No separately built native
-SDK is required. The API, vector and lifecycle suites are described in
-[VERIFICATION.md](../VERIFICATION.md).
+SDK is required.
 
 ## Directory structure
 
@@ -150,7 +149,5 @@ application identifier is `software.globus.glmap.flutter.demo`.
 points have `lifecycle_test.dart` and `vector_demo_test.dart`; authenticated services
 and retained downloads have `online_test.dart` and `offline_restore_test.dart`.
 
-See [VERIFICATION.md](../VERIFICATION.md) for test commands, screenshot capture,
-platform input tests and the required ordering of online/restoration suites.
 These tests require an Android or iOS target. Never share API keys or unreviewed
 authenticated logs.

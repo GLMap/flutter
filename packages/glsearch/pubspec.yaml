@@ -1,8 +1,9 @@
 name: glsearch
-description: Globus glsearch SDK for Flutter on Android and iOS.
+description: Online and offline place search and autocomplete for Flutter on Android and iOS, without requiring a map view.
 version: 0.1.0-beta.1
 homepage: https://globus.software
-publish_to: none
+repository: https://github.com/GLMap/flutter/tree/main/packages/glsearch
+issue_tracker: https://github.com/GLMap/flutter/issues
 resolution: workspace
 environment:
   sdk: ^3.13.3

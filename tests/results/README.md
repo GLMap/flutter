@@ -1,8 +1,5 @@
 # Verification evidence
 
-See [VERIFICATION.md](../../VERIFICATION.md) for test commands, recorded results
-and the release-validation procedure.
-
 ## Contents
 
 - [release-2.2.0.json](release-2.2.0.json): public GLMap 2.2.0 dependency resolution,

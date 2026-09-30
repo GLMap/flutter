@@ -31,7 +31,7 @@ alone does not update native frameworks. Keep Core, Map, Search and Route on the
 same native release. Initialize Core before any native API, including headless
 Search/Route calls. Vector updates preserve `Ready`, `Superseded`, `Cancelled`
 and `Failed`; `Ready` means geometry is ready to draw, not that a frame has been
-presented. See [verification](VERIFICATION.md) for release checks and their scope.
+presented.
 
 ## Add a map to your app
 
@@ -210,9 +210,7 @@ not on one another; Search and Route do not pull in the map renderer.
 
 ## Contributing
 
-See the [source guide](SOURCE.md) for package structure and API development, and
-[VERIFICATION.md](VERIFICATION.md) for integration-test commands, test coverage
-and contributor checks.
+See the [source guide](SOURCE.md) for package structure and API development.
 
 ## Licensing
 

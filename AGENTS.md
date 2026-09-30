@@ -26,9 +26,9 @@ on the public Dart API, platform bridges, examples and tests.
   Re-run the relevant Android and iOS integration suites for API or platform
   changes, and the API and lifecycle suites whenever the native dependency
   version changes.
-- Report checks actually performed. Distinguish emulator/simulator runs, unsigned
-  device builds, signed physical-device runs and authenticated service tests.
-  See [VERIFICATION.md](VERIFICATION.md) for test coverage and reporting guidance.
+- Report checks actually performed in the chat, not in committed release reports.
+  Distinguish host tests, emulator/simulator runs, unsigned device builds,
+  signed physical-device runs and authenticated service tests.
 
 ## Documentation and repository hygiene
 
@@ -36,9 +36,7 @@ Write installation and usage documentation for the published SDK: use pub.dev
 packages and public native dependency repositories. Keep temporary publication
 status and release-preparation workarounds out of user guides. Do not refer to
 internal projects, private source checkouts, workstation paths or development
-history. Document test coverage and actual results in
-[VERIFICATION.md](VERIFICATION.md) without inferring successful checks from
-publication status.
+history. Do not infer successful checks from publication status.
 
 Do not commit credentials, native SDK binaries or generated platform builds.
 Review test logs before sharing them; remove API keys and machine-specific paths.
